@@ -1,0 +1,62 @@
+<mat-card>
+  <mat-card-title> Edit Transaction </mat-card-title>
+  <mat-card-content [formGroup]="form">
+	<table style="width:100%" class="editor-container">
+  <tr>
+    <td>
+ 	  <mat-form-field>
+		<mat-label>Date</mat-label>
+		<input matInput [matDatepicker]="picker" required formControlName="date">
+		<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+		<mat-datepicker #picker></mat-datepicker>
+	  </mat-form-field>
+	</td>
+    <td colspan="1">
+	  <mat-radio-group required formControlName="type">
+	    <mat-radio-button value="DEPOSIT">Deposit</mat-radio-button>
+	  	<mat-radio-button value="PAYMENT">Payment</mat-radio-button>
+	  </mat-radio-group>
+	</td>
+  </tr>
+  <tr>
+    <td>
+      <mat-form-field>
+	    <mat-label>Amount</mat-label>
+		<input matInput required formControlName="amount">
+	  </mat-form-field>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <mat-form-field>
+	    <mat-label>Reference</mat-label>
+		<input matInput required formControlName="reference">
+	  </mat-form-field>
+    </td>
+  </tr>
+  <tr>
+  <tr>
+    <td colspan="2">
+      <mat-form-field>
+	    <mat-select placeholder="Counter Account" formControlName="counteraccount">
+		  <mat-option *ngFor="let account of counterAccounts" [value]="account"> {{account.name}} </mat-option>
+		</mat-select>
+	  </mat-form-field>
+    </td>
+  </tr>  
+  <tr>
+    <td colspan="2">
+      <mat-form-field>
+	    <mat-select placeholder="Clearing Account" formControlName="clearingaccount">
+		  <mat-option *ngFor="let account of clearingAccounts" [value]="account"> {{account.name}} </mat-option>
+		</mat-select>
+	  </mat-form-field>
+    </td>
+  </tr>  
+</table>
+  </mat-card-content>
+  <mat-card-actions >
+    <button class="mat-raised-button" (click)="cancel()">Cancel</button>
+    <button class="mat-raised-button mat-primary" [disabled]="!form.valid" (click)="save()">Save</button>
+  </mat-card-actions >
+</mat-card>

@@ -1,0 +1,74 @@
+<mat-card>{{investmentName}}</mat-card>
+<section>
+    <button mat-button color="primary" 
+      (click)="onAddClicked()" 
+      [disabled]="selectedRow != null && selectedRow.selected">Add</button>
+    <button mat-button color="primary" 
+    	[disabled]="selectedRow == null || !selectedRow.selected"
+    	(click)="onEditClicked()">Edit</button>
+</section>
+<mat-table mat-table [dataSource]="dataSource" class="mat-elevation-z0" multiTemplateDataRows>
+  <ng-container matColumnDef="date">
+    <mat-header-cell *matHeaderCellDef>  Date </mat-header-cell>
+    <mat-cell *matCellDef="let trx"> {{trx.date}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="type">
+    <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+    <mat-cell *matCellDef="let trx"> {{trx.type}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="reference">
+    <mat-header-cell *matHeaderCellDef> Reference </mat-header-cell>
+    <mat-cell *matCellDef="let trx"> {{trx.reference}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="quantity">
+    <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
+    <mat-cell *matCellDef="let trx"> {{trx.quantity}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="price">
+    <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+    <mat-cell *matCellDef="let trx"> {{trx.price}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="total">
+    <mat-header-cell *matHeaderCellDef> Total </mat-header-cell>
+    <mat-cell *matCellDef="let trx"> {{ ((trx.quantity * trx.price) + trx.fee + trx.tax).toFixed(2) }} </mat-cell>
+  </ng-container>
+  
+  <!-- Expanded Content Columns - The detail row is made up of this one column -->
+    <ng-container matColumnDef="expandedEmpty">
+      <mat-cell *matCellDef=""> 
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="expandedPrice">
+      <mat-cell *matCellDef="let detail"> 
+        Price: {{detail.price}}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="expandedFee">
+      <mat-cell *matCellDef="let detail"> 
+        Fee: {{detail.fee}}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="expandedTax">
+      <mat-cell *matCellDef="let detail"> 
+        Tax:  {{detail.tax}}
+      </mat-cell>
+    </ng-container>
+    
+  <mat-header-row *matHeaderRowDef="cols"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: cols" 
+    matRipple 
+    (click)="onRowClicked(row)" 
+    [ngClass]="{ 'highlight': row.selected == true }">
+  </mat-row>
+  <mat-row *matRowDef="let row; columns: ['expandedEmpty','expandedEmpty','expandedPrice', 'expandedFee', 'expandedTax']"
+    [@detailExpand]="row.selected ? 'expanded' : 'collapsed'"
+    style="overflow: hidden"> 
+  </mat-row>
+</mat-table>
+<div class="row container-fluid" *ngIf="showEditArea" id="editarea" >
+  <app-investment-transaction-edit
+    [entity]="selectedRow"
+    [investment]="investment"
+	(editCancelEvent)="onCancelEvent($event)"
+	(editSubmitEvent)="onSubmitEvent($event)"></app-investment-transaction-edit>
+</div>

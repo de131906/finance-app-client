@@ -1,0 +1,36 @@
+<mat-card>
+  <mat-card-title> Edit Account </mat-card-title>
+  <mat-card-content [formGroup]="form">
+	<table style="width:100%" class="editor-container">
+	  <tr>
+	    <td>
+	      <mat-radio-group required formControlName="type">
+	        <mat-radio-button value="INCOME">Income</mat-radio-button>
+	  	    <mat-radio-button value="EXPENSE">Expense</mat-radio-button>
+	      </mat-radio-group>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>
+		  <mat-form-field>
+		    <mat-label>Name</mat-label>
+			<input matInput formControlName="name">
+		  </mat-form-field>
+		</td>
+	  </tr>
+	  <tr>
+	    <td>
+		  <mat-form-field>
+		    <mat-select placeholder="Currency" formControlName="currency" [compareWith]="compareEntity">
+		      <mat-option *ngFor="let ccy of currencies" [value]="ccy"> {{ccy.name}} </mat-option>
+		    </mat-select>
+		  </mat-form-field>
+		</td>
+	  </tr>
+	</table>
+  </mat-card-content>
+  <mat-card-actions >
+    <button class="mat-raised-button" (click)="cancel()">Cancel</button>
+    <button class="mat-raised-button mat-primary" [disabled]="!form.valid" (click)="save()">Save</button>
+  </mat-card-actions >
+</mat-card>

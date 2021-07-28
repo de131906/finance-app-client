@@ -1,0 +1,75 @@
+<div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutGap="12px" style="margin:12px">
+<mat-form-field>
+    <mat-select placeholder="Depots"  [formControl]="fcDepot">
+      <mat-option *ngFor="let depot of depots" [value]="depot"> {{depot.name}} - {{depot.iban}} </mat-option>
+    </mat-select>
+</mat-form-field>
+</div>
+<section>
+    <button mat-button color="primary"
+        [disabled]="(selectedRow != null && selectedRow.selected) || depot == null"
+        (click)="onAddClicked()">Add</button>
+    <button mat-button color="primary" 
+    	[disabled]="(selectedRow == null || !selectedRow.selected) || depot == null"
+    	(click)="onEditClicked()">Edit</button>
+    <button mat-button color="primary" 
+    	[disabled]="(selectedRow == null || !selectedRow.selected) || depot == null"
+    	(click)="onDeleteClicked()">Delete</button>
+    <button mat-button color="primary" 
+    	[disabled]="(selectedRow == null || !selectedRow.selected) || depot == null"
+    	[routerLink]="['/investment/trx']" [queryParams]="{uid: selectedRow?.id}">Transactions</button>
+</section>
+<mat-table [dataSource]="dataSource" class="mat-elevation-z0" matSort (matSortChange)="onSortData($event)">
+  <ng-container matColumnDef="equity">
+    <mat-header-cell *matHeaderCellDef> Equity </mat-header-cell>
+    <mat-cell *matCellDef="let investment"> {{investment.equity.name}} </mat-cell>
+    <mat-footer-cell *matFooterCellDef>Total:</mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="quantity">
+    <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
+    <mat-cell *matCellDef="let investment"> {{investment.quantity}} </mat-cell>
+    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="value">
+    <mat-header-cell *matHeaderCellDef> Value </mat-header-cell>
+    <mat-cell *matCellDef="let investment"> {{investment.value.toFixed(2)}} </mat-cell>
+    <mat-footer-cell *matFooterCellDef> Value: {{ totalCols.get('value') }}</mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="price">
+    <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+    <mat-cell *matCellDef="let investment"> 
+      {{investment.price.date}}-{{investment.price.rate}} 
+    </mat-cell>
+    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="expenditure">
+    <mat-header-cell *matHeaderCellDef> Expenditure </mat-header-cell>
+    <mat-cell *matCellDef="let investment"> {{investment.expenditure.toFixed(2)}} </mat-cell>
+    <mat-footer-cell *matFooterCellDef> Expenditure: {{ totalCols.get('expenditure') }}</mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="earning">
+    <mat-header-cell *matHeaderCellDef> Earning </mat-header-cell>
+    <mat-cell *matCellDef="let investment"> {{investment.earning.toFixed(2)}} </mat-cell>
+    <mat-footer-cell *matFooterCellDef> Earning: {{ totalCols.get('earning') }}</mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="profit">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Profit </mat-header-cell>
+    <mat-cell *matCellDef="let investment"> {{investment.profit.toFixed(2)}} </mat-cell>
+    <mat-footer-cell *matFooterCellDef> Profit: {{ totalCols.get('profit') }}</mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="yield">
+    <mat-header-cell *matHeaderCellDef> Yield </mat-header-cell>
+    <mat-cell *matCellDef="let investment"> {{investment.yield.toFixed(2)}}% </mat-cell>
+    <mat-footer-cell *matFooterCellDef> Yield: {{ totalCols.get('yield') }}%</mat-footer-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="cols"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: cols" (click)="onRowClicked(row)" [ngClass]="{ 'highlight': row.selected == true }">></mat-row>
+  <mat-footer-row class="sticky-footer" *matFooterRowDef="cols"></mat-footer-row>
+</mat-table>
+<div class="row container-fluid" *ngIf="showEditArea" id="editarea" >
+	<app-investment-edit
+	  [depot]="depot" 
+	  [entity]="selectedRow"
+	  (editCancelEvent)="onCancelEvent($event)"
+	  (editSubmitEvent)="onSubmitEvent($event)"></app-investment-edit>
+</div>

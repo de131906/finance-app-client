@@ -1,0 +1,42 @@
+<mat-toolbar fxLayout="row" color="primary">
+    <span fxFlex>{{title}}</span>
+    <ng-container *ngFor="let item of navItems">
+	    <button mat-button *ngIf="!item.items" fxHide.xs routerLink="{{item.link}}">
+	        <mat-icon class="mr">{{item.icon}}</mat-icon>
+	        {{item.label}}
+	    </button>
+	    <button mat-button *ngIf="item.items" fxHide.xs [matMenuTriggerFor]="menuData">
+	        <mat-icon class="mr">{{item.icon}}</mat-icon>
+	        {{item.label}}
+	    </button>
+	    <mat-menu #menuData="matMenu" >
+	      <button *ngFor="let item of item.items" mat-menu-item routerLink="{{item.link}}">
+	        <mat-icon class="mr" *ngIf="item.icon">{{item.icon}}</mat-icon>
+	        {{item.label}}
+	      </button>
+	    </mat-menu>
+    </ng-container>
+    <button mat-icon-button [matMenuTriggerFor]="dropMenu" fxHide fxShow.xs>
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #dropMenu="matMenu">
+        <ng-container *ngFor="let item of navItems">
+            <button mat-menu-item routerLink="{{item.link}}" *ngIf="!item.items">
+                <mat-icon class="mr">{{item.icon}}</mat-icon>
+                {{item.label}}
+            </button>
+            <button mat-menu-item *ngIf="item.items" [matMenuTriggerFor]="menuData">
+	          <mat-icon class="mr">{{item.icon}}</mat-icon>
+	          {{item.label}}
+	        </button>
+	        <mat-menu #menuData="matMenu" >
+	          <button *ngFor="let item of item.items" mat-menu-item routerLink="{{item.link}}">
+	            <mat-icon class="mr" *ngIf="item.icon">{{item.icon}}</mat-icon>
+	            {{item.label}}
+	          </button>
+	        </mat-menu>
+            <mat-divider></mat-divider>
+        </ng-container>
+    </mat-menu>
+</mat-toolbar>
+<router-outlet></router-outlet>

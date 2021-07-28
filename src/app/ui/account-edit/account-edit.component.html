@@ -1,0 +1,66 @@
+<mat-card>
+  <mat-card-title> Edit Account </mat-card-title>
+  <mat-card-content [formGroup]="form">
+	<table style="width:100%" class="editor-container">
+	  <tr>
+		<td>
+	      <mat-form-field>
+	        <mat-select placeholder="Institution" formControlName="institution" [compareWith]="compareEntity">
+		      <mat-option *ngFor="let inst of institutions" [value]="inst"> {{inst.name}} </mat-option>
+		    </mat-select>
+	      </mat-form-field>
+	    </td>
+	    <td>
+	      <mat-form-field>
+		    <mat-select placeholder="Type" formControlName="type" >
+		      <mat-option *ngFor="let type of types" [value]="type"> {{type}} </mat-option>
+		    </mat-select>
+		  </mat-form-field>
+	    </td>
+	    <td>
+		  <mat-form-field>
+		    <mat-select placeholder="Currency" formControlName="currency" [compareWith]="compareEntity">
+		      <mat-option *ngFor="let ccy of currencies" [value]="ccy"> {{ccy.name}} </mat-option>
+		    </mat-select>
+		  </mat-form-field>
+		</td>
+	  </tr>
+	  <tr>
+			<td colspan="3">
+				<mat-form-field>
+					<mat-label>Name</mat-label>
+					<input matInput formControlName="name">
+				</mat-form-field>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<mat-form-field>
+					<mat-label>IBAN</mat-label>
+					<input matInput formControlName="iban" >
+				</mat-form-field>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<mat-form-field>
+					<mat-label>Opening Balance</mat-label>
+					<input matInput formControlName="openBalance">
+				</mat-form-field>
+			</td>
+			<td>
+		 		<mat-form-field>
+					<mat-label>Opening Date</mat-label>
+					<input matInput [matDatepicker]="picker" formControlName="openDate">
+					<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+					<mat-datepicker #picker></mat-datepicker>
+			  	</mat-form-field>
+			</td>
+		</tr>
+	</table>
+  </mat-card-content>
+  <mat-card-actions >
+    <button class="mat-raised-button" (click)="cancel()">Cancel</button>
+    <button class="mat-raised-button mat-primary" [disabled]="!form.valid" (click)="save()">Save</button>
+  </mat-card-actions >
+</mat-card>

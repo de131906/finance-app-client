@@ -1,0 +1,41 @@
+<section>
+    <button mat-button color="primary"
+        [disabled]="selectedRow != null && selectedRow.selected"
+        (click)="onAddClicked()">Add</button>
+    <button mat-button color="primary" 
+    	[disabled]="selectedRow == null || !selectedRow.selected"
+    	(click)="onEditClicked()">Edit</button>
+    <button mat-button color="primary" 
+    	[disabled]="selectedRow == null || !selectedRow.selected"
+    	(click)="onDeleteClicked()">Delete</button>
+</section>
+<mat-table mat-table [dataSource]="dataSource" class="mat-elevation-z0 table-container">
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let equity"> {{equity.name}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="symbol">
+    <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
+    <mat-cell *matCellDef="let equity"> {{equity.symbol}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="type">
+    <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+    <mat-cell *matCellDef="let equity"> {{equity.type}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="isin">
+    <mat-header-cell *matHeaderCellDef> ISIN </mat-header-cell>
+    <mat-cell *matCellDef="let equity"> {{equity.isin}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="currency">
+    <mat-header-cell *matHeaderCellDef> Currency </mat-header-cell>
+    <mat-cell *matCellDef="let equity"> {{equity.currency.symbol}} </mat-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="cols; sticky: true"></mat-header-row>
+  <mat-row mat-row *matRowDef="let row; columns: cols" (click)="onRowClicked(row)" [ngClass]="{ 'highlight': row.selected == true }"></mat-row>
+</mat-table>
+<div class="row container-fluid" *ngIf="showEditArea" id="editarea" >
+	<app-equity-edit
+	  [entity]="selectedRow"
+	  (editCancelEvent)="onCancelEvent($event)"
+	  (editSubmitEvent)="onSubmitEvent($event)"></app-equity-edit>
+</div>

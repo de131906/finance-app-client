@@ -1,0 +1,86 @@
+<h2 mat-dialog-title>Upload Transactions</h2>
+<mat-dialog-content [formGroup]="form">
+    <p><mat-form-field>
+        <input matInput readonly="true"
+                placeholder="Account"
+               formControlName="account">
+    </mat-form-field></p>
+    <div class="file-upload" *ngIf="!showTableArea">
+	    <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+	    <mat-form-field>
+	        <input matInput readonly="true"
+	                placeholder="File"
+	               formControlName="fileName">
+	    </mat-form-field>
+	    <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()" style="margin-left:24px;">
+	        <mat-icon>attach_file</mat-icon>
+	    </button>
+    </div>
+    <div class="row container-fluid" *ngIf="showTableArea" id="tablearea" >
+    	<mat-table mat-table [dataSource]="dataSource" class="mat-elevation-z0" multiTemplateDataRows>
+    	  <ng-container matColumnDef="import">
+		    <mat-header-cell *matHeaderCellDef>
+		      <mat-checkbox (change)="$event ? selectAll() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+              </mat-checkbox>
+		    </mat-header-cell>
+		    <mat-cell *matCellDef="let trx; let idx=index">
+		      <mat-checkbox [checked]="selection.isSelected(trx)" 
+		      	(change)="$event ? selection.toggle(trx) : null"
+		      	#select></mat-checkbox>
+		    </mat-cell>
+		  </ng-container>
+		  <ng-container matColumnDef="date">
+		    <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+		    <mat-cell *matCellDef="let trx"> {{trx.date}} </mat-cell>
+		  </ng-container>
+		  <ng-container matColumnDef="type">
+		    <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+		    <mat-cell *matCellDef="let trx"> {{trx.type}} </mat-cell>
+		  </ng-container>
+		  <ng-container matColumnDef="reference">
+		    <mat-header-cell *matHeaderCellDef> Reference </mat-header-cell>
+		    <mat-cell *matCellDef="let trx"> {{trx.reference}} </mat-cell>
+		  </ng-container>
+		  <ng-container matColumnDef="principal">
+		    <mat-header-cell *matHeaderCellDef> Principal </mat-header-cell>
+		    <mat-cell *matCellDef="let trx"> {{trx.principal}} </mat-cell>
+		  </ng-container>
+		  <ng-container matColumnDef="payee">
+		    <mat-header-cell *matHeaderCellDef> Payee </mat-header-cell>
+		    <mat-cell *matCellDef="let trx"> {{trx.payee}} </mat-cell>
+		  </ng-container>
+		  <ng-container matColumnDef="amount">
+		    <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+		    <mat-cell *matCellDef="let trx"> {{trx.amount}} </mat-cell>
+		  </ng-container>
+		  <ng-container matColumnDef="duplicate">
+		    <mat-header-cell *matHeaderCellDef> Duplicate </mat-header-cell>
+		    <mat-cell *matCellDef="let trx">
+		      <mat-checkbox [checked]="trx.duplicate" [disabled]="true"></mat-checkbox>
+		    </mat-cell>
+		  </ng-container>
+		  <ng-container matColumnDef="counter">
+		    <mat-header-cell *matHeaderCellDef> Counter Account </mat-header-cell>
+		    <mat-cell *matCellDef="let trx">
+		      <mat-select placeholder="Counter Account" (selectionChange)="onCounterAccountSelected($event.value, trx); select" #counterAccount>
+		        <mat-option *ngFor="let account of counterAccounts" [value]="account"> {{account.name}} </mat-option>
+		      </mat-select>
+		    </mat-cell>
+		  </ng-container>
+		  <mat-header-row *matHeaderRowDef="cols sticky: true"></mat-header-row>
+		  <mat-row *matRowDef="let row; columns: cols;" matRipple ></mat-row>
+		</mat-table>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+    <button class="mat-raised-button mat-primary" 
+    	(click)="upload()"
+    	[disabled]="!form.valid"
+    	*ngIf="!showTableArea" >Upload</button>
+    <button class="mat-raised-button mat-primary" 
+    	(click)="import()"
+    	*ngIf="showTableArea && selection.selected.length > 0" >Import</button>
+</mat-dialog-actions>

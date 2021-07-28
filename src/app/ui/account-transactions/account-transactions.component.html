@@ -1,0 +1,77 @@
+<div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutGap="12px" 
+  style="margin-top:12px; margin-bottom:12px">
+  <mat-card>{{account ? account.name + " - " + account.iban : ''}}</mat-card>
+</div>
+<div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutGap="12px" 
+  style="margin-top:12px; margin-bottom:12px">
+    <button mat-button color="primary" 
+      (click)="onAddClicked()" 
+      [disabled]="selectedRow != null && selectedRow.selected">Add</button>
+    <button mat-button color="primary"
+        [disabled]="selectedRow != null && selectedRow.selected"
+        (click)="onUploadClicked()">Upload</button>
+</div>
+<mat-table mat-table [dataSource]="dataSource" class="mat-elevation-z0" multiTemplateDataRows>
+  <ng-container matColumnDef="date">
+    <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+    <mat-cell *matCellDef="let trx"> {{trx.date}} </mat-cell>
+    <mat-footer-cell *matFooterCellDef>Total:</mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="type">
+    <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+    <mat-cell *matCellDef="let trx"> {{trx.type}} </mat-cell>
+    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="reference">
+    <mat-header-cell *matHeaderCellDef> Reference </mat-header-cell>
+    <mat-cell *matCellDef="let trx"> {{trx.reference}} </mat-cell>
+    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="amount">
+    <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+    <mat-cell *matCellDef="let trx"> {{trx.amount.toFixed(2)}} </mat-cell>
+    <mat-footer-cell *matFooterCellDef> {{ totalAmount.toFixed(2) }}</mat-footer-cell>
+  </ng-container>
+  
+  <!-- Expanded Content Columns - The detail row is made up of this one column -->
+    <ng-container matColumnDef="expandedEmpty">
+      <mat-cell *matCellDef=""> 
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="expandedAccount">
+      <mat-cell *matCellDef="let detail"> 
+        Counter Account: {{detail.counterTransaction.account.name}}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="expandedType">
+      <mat-cell *matCellDef="let detail"> 
+        {{detail.counterTransaction.account.accountType}}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="expandedAmount">
+      <mat-cell *matCellDef="let detail"> 
+        {{detail.counterTransaction.amount.toFixed(2)}}
+      </mat-cell>
+    </ng-container>
+  
+  <mat-header-row *matHeaderRowDef="cols sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: cols;" 
+    matRipple 
+    class="element-row" 
+    (click)="onRowClicked(row)" 
+    [ngClass]="{ 'highlight': row.selected == true }">
+  </mat-row>
+  <mat-row *matRowDef="let row; columns: ['expandedEmpty', 'expandedAccount', 'expandedType', 'expandedAmount']"
+            [@detailExpand]="row.selected ? 'expanded' : 'collapsed'"
+            style="overflow: hidden"> 
+  </mat-row>
+  <mat-footer-row class="sticky-footer" *matFooterRowDef="cols sticky: true"></mat-footer-row>
+</mat-table>
+<div class="row container-fluid" *ngIf="showEditArea" id="editarea" >
+  <app-account-transaction-edit 
+    [entity]="selectedRow"
+    [account]="account"
+	(editCancelEvent)="onCancelEvent($event)"
+	(editSubmitEvent)="onSubmitEvent($event)">
+  </app-account-transaction-edit>
+</div>

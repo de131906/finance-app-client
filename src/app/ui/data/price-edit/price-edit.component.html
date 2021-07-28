@@ -1,0 +1,29 @@
+<mat-card>
+  <mat-card-title> Edit Price </mat-card-title>
+  <mat-card-content [formGroup]="form">
+	<p>
+	  <mat-form-field>
+		<mat-label>Equity</mat-label>
+		<input matInput formControlName="equity" readonly="true">
+	  </mat-form-field>
+	</p>
+	<p>
+	  <mat-form-field>
+		<mat-label>Date</mat-label>
+		<input matInput [matDatepicker]="picker" required formControlName="date">
+		<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+		<mat-datepicker #picker></mat-datepicker>
+	  </mat-form-field>
+	</p>
+	<p>
+	  <mat-form-field>
+		<mat-label>Rate</mat-label>
+		<input matInput formControlName="rate">
+	  </mat-form-field>
+	</p>
+  </mat-card-content>
+  <mat-card-actions >
+    <button class="mat-raised-button" (click)="cancel()">Cancel</button>
+    <button class="mat-raised-button mat-primary" [disabled]="!form.valid" (click)="save()">Save</button>
+  </mat-card-actions >
+</mat-card>

@@ -1,0 +1,25 @@
+<mat-card>
+  <mat-card-title> Edit Investment </mat-card-title>
+  <mat-card-content [formGroup]="form">
+	<table style="width:100%" class="editor-container">
+	<tr><td>
+		<mat-form-field>
+			<mat-label>Depot</mat-label>
+			<input matInput value="{{depot.name}}" readonly="true">
+		</mat-form-field>
+	</td></tr>
+	<tr><td>
+		<mat-form-field>
+			<mat-select placeholder="Equity" formControlName="equity">
+		    	<mat-option *ngFor="let equity of equities" [value]="equity"> {{equity.name}} </mat-option>
+		    </mat-select>
+		</mat-form-field>
+	</td></tr>
+	</table>
+  </mat-card-content>
+  <mat-card-actions >
+    <button class="mat-raised-button" (click)="cancel()">Cancel</button>
+    <button class="mat-raised-button mat-primary" [disabled]="!form.valid" (click)="save()">Save</button>
+  </mat-card-actions >
+</mat-card>
+   

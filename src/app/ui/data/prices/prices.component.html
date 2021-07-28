@@ -1,0 +1,37 @@
+<div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutGap="12px" style="margin:12px">
+<mat-form-field>
+    <mat-select placeholder="Equities" (selectionChange)=onEquitySelected($event.value) [formControl]="fcEquity">
+      <mat-option *ngFor="let equity of equities" [value]="equity"> {{equity.name}} </mat-option>
+    </mat-select>
+</mat-form-field>
+</div>
+<section>
+    <button mat-button color="primary"
+        [disabled]="(selectedRow != null && selectedRow.selected) || equity == null"
+        (click)="onAddClicked()">Add</button>
+    <button mat-button color="primary" 
+    	[disabled]="selectedRow == null || !selectedRow.selected"
+    	(click)="onEditClicked()">Edit</button>
+    <button mat-button color="primary" 
+    	[disabled]="selectedRow == null || !selectedRow.selected"
+    	(click)="onDeleteClicked()">Delete</button>
+</section>
+<mat-table mat-table [dataSource]="dataSource" class="mat-elevation-z0 table-container">
+  <ng-container matColumnDef="date">
+    <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+    <mat-cell *matCellDef="let price"> {{price.date}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="rate">
+    <mat-header-cell *matHeaderCellDef> Rate </mat-header-cell>
+    <mat-cell *matCellDef="let price"> {{price.rate}} </mat-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="cols; sticky: true"></mat-header-row>
+  <mat-row mat-row *matRowDef="let row; columns: cols" (click)="onRowClicked(row)" [ngClass]="{ 'highlight': row.selected == true }"></mat-row>
+</mat-table>
+<div class="row container-fluid" *ngIf="showEditArea" id="editarea" >
+	<app-price-edit
+	  [entity]="selectedRow"
+	  [equity]="equity"
+	  (editCancelEvent)="onCancelEvent($event)"
+	  (editSubmitEvent)="onSubmitEvent($event)"></app-price-edit>
+</div>

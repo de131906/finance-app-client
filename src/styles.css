@@ -1,0 +1,19 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+body {
+	margin: 0;
+}
+table {
+  width: 100%;
+}
+.table-container {
+  max-height: calc(100vh - 155px);
+  overflow: auto;
+}
+#editarea {
+  position: absolute;
+  bottom: 0;
+}
+.highlight{
+  background: #55aaff;
+}

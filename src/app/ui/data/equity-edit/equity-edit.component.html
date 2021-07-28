@@ -1,0 +1,49 @@
+<mat-card>
+  <mat-card-title> Edit Equity </mat-card-title>
+  <mat-card-content [formGroup]="form">
+	<table style="width:100%" class="editor-container">
+	  <tr>
+		<td colspan="2">
+		  <mat-form-field>
+			<mat-label>Name</mat-label>
+			<input matInput formControlName="name">
+		  </mat-form-field>
+		  </td>
+	  </tr>
+	  <tr>
+		<td>
+	      <mat-form-field>
+			<mat-label>Symbol</mat-label>
+			  <input matInput formControlName="symbol">
+			</mat-form-field>
+	    </td>
+		<td>
+		  <mat-form-field>
+		    <mat-label>ISIN</mat-label>
+			<input matInput formControlName="isin" >
+		  </mat-form-field>
+		</td>
+	  </tr>
+	  <tr>
+	    <td>
+	      <mat-form-field>
+		    <mat-select placeholder="Type" formControlName="type" >
+		      <mat-option *ngFor="let type of types" [value]="type"> {{type}} </mat-option>
+		    </mat-select>
+		  </mat-form-field>
+	    </td>
+	    <td>
+		  <mat-form-field>
+		    <mat-select placeholder="Currency" formControlName="currency" [compareWith]="compareEntity">
+		      <mat-option *ngFor="let ccy of currencies" [value]="ccy"> {{ccy.name}} </mat-option>
+		    </mat-select>
+		  </mat-form-field>
+		</td>
+	  </tr>
+	</table>
+  </mat-card-content>
+  <mat-card-actions >
+    <button class="mat-raised-button" (click)="cancel()">Cancel</button>
+    <button class="mat-raised-button mat-primary" [disabled]="!form.valid" (click)="save()">Save</button>
+  </mat-card-actions >
+</mat-card>

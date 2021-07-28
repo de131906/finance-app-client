@@ -1,0 +1,21 @@
+<mat-card>
+  <mat-card-title> Edit Institution </mat-card-title>
+  <mat-card-content [formGroup]="form">
+	<p>
+	  <mat-form-field>
+	    <mat-label>BIC</mat-label>
+		<input matInput formControlName="bic" >
+	  </mat-form-field>
+	</p>
+	<p>
+	  <mat-form-field>
+		<mat-label>Name</mat-label>
+		<input matInput formControlName="name">
+	  </mat-form-field>
+	</p>
+  </mat-card-content>
+  <mat-card-actions >
+    <button class="mat-raised-button" (click)="cancel()">Cancel</button>
+    <button class="mat-raised-button mat-primary" [disabled]="!form.valid" (click)="save()">Save</button>
+  </mat-card-actions >
+</mat-card>
