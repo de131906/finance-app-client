@@ -31,12 +31,17 @@ export class CurrencyEditComponent implements OnInit {
   }
 
   save() {
-	if (this.form.valid) {
-	  let dto: Currency = { symbol: this.form.get('symbol').value, name: this.form.get('name').value };
-	  if (this.entity) { dto.id = this.entity.id, dto.rev = this.entity.rev }
-	  this.editSubmitEvent.emit(dto);
-	  this.form.reset();
-	}
+    if (this.form.valid) {
+      if (this.entity) {
+        this.entity.name = this.form.get('name').value;
+        this.entity.symbol = this.form.get('symbol').value;
+        this.editSubmitEvent.emit(this.entity);
+      } else {
+        let dto: Currency = { symbol: this.form.get('symbol').value, name: this.form.get('name').value };
+        this.editSubmitEvent.emit(dto);
+      }
+      this.form.reset();
+    }
   }
   cancel() {
 	this.form.reset();

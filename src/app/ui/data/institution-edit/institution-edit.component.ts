@@ -30,11 +30,16 @@ export class InstitutionEditComponent implements OnInit {
 
   save() {
 	if (this.form.valid) {
-	  let dto: Institution = { bic: this.form.get('bic').value, name: this.form.get('name').value };
-	  if (this.entity) { dto.id = this.entity.id; dto.rev = this.entity.rev }
-	  this.editSubmitEvent.emit(dto);
+	  if (this.entity) {
+      this.entity.name = this.form.get('name').value;
+      this.entity.bic = this.form.get('bic').value;
+      this.editSubmitEvent.emit(this.entity);
+    } else {
+      let dto: Institution = { bic: this.form.get('bic').value, name: this.form.get('name').value };
+	    this.editSubmitEvent.emit(dto);
+    }
 	  this.form.reset();
-	}
+  }
   }
   cancel() {
 	this.form.reset();
