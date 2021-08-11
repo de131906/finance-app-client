@@ -3,6 +3,6 @@ import { Equity } from './equity';
 
 export interface Price extends BaseEntity {
 	equity: Equity;
-	date: Date;
+	date: string;
 	rate: string;
 }

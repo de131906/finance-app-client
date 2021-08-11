@@ -18,7 +18,7 @@ export class PricesComponent extends BaseTableComponent<Price> implements OnInit
 
   dataSource: PriceDatasource;
   cols: string[] = ['date', 'rate']
-  equities: Equity[]; 
+  equities: Equity[];
   equity: Equity;
   fcEquity = new FormControl('', [Validators.required]);
 
@@ -42,8 +42,13 @@ export class PricesComponent extends BaseTableComponent<Price> implements OnInit
   onEquitySelected(equity: Equity) {
 	this.equity = equity;
 	this.service.findAllByEquity(equity).subscribe(
-		data => { this.dataSource.setData(data) }
-	);
+		data => {
+      this.dataSource.setData(data)
+    },error => {
+      const dialogConfig = this.getDialogConfig();
+      dialogConfig.data = { errorMessage: error }
+      this.dialog.open(ErrorDialogComponent, dialogConfig);
+    });
   }
 
   onSubmitEvent(entity: Price) {

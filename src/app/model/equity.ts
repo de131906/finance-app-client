@@ -7,5 +7,4 @@ export interface Equity extends BaseEntity {
   type: string;
   isin: string;
   currency: Currency;
-  currencyId: string;
 }

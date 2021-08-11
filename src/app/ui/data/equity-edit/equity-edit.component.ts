@@ -51,19 +51,26 @@ export class EquityEditComponent extends BaseEditComponent<Equity> implements On
   }
 
   save() {
-	if (this.form.valid) {
-	  let dto: Equity = { 
-		name: this.form.get('name').value,
-		type: this.form.get('type').value,
-		symbol: this.form.get('symbol').value,
-		isin: this.form.get('isin').value,
-		currency: this.form.get('currency').value,
-		currencyId: this.form.get('currency').value.id,
-	  };
-	  if (this.entity) { dto.id = this.entity.id, dto.rev = this.entity.rev }
-	  this.editSubmitEvent.emit(dto);
-	  this.form.reset();
-	}
+    if (this.form.valid) {
+      if (this.entity) {
+        this.entity.name = this.form.get('name').value;
+        this.entity.type = this.form.get('type').value;
+        this.entity.symbol = this.form.get('symbol').value;
+        this.entity.isin = this.form.get('isin').value;
+        this.entity.currency = this.form.get('currency').value;
+        this.editSubmitEvent.emit(this.entity);
+      } else {
+        let dto: Equity = {
+          name: this.form.get('name').value,
+          type: this.form.get('type').value,
+          symbol: this.form.get('symbol').value,
+          isin: this.form.get('isin').value,
+          currency: this.form.get('currency').value,
+        };
+        this.editSubmitEvent.emit(dto);
+      }
+      this.form.reset();
+    }
   }
 
   cancel() {
